@@ -1,9 +1,9 @@
-import { use } from "react";
+import { use, useState } from "react";
 
 const Users = ({ usersPromise }) => {
-    const users = use(usersPromise)
-    console.log(users)
-
+    const initalUsers = use(usersPromise)
+    console.log(initalUsers)
+    const [users, setUsers] = useState(initalUsers)
     const handleAddUser = (e) => {
         e.preventDefault()
         const name = e.target.name.value;
@@ -20,7 +20,12 @@ const Users = ({ usersPromise }) => {
             body: JSON.stringify(user)
         })
             .then(res => res.json())
-            .then(data => console.log('data after post', data))
+            .then(data => {
+                console.log('data after post', data)
+                const newUser = [...users,data];
+                setUsers(newUser)
+                e.target.reset()
+            })
     };
     return (
         <div>
